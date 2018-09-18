@@ -1,7 +1,5 @@
 # MXNet on Amazon EKS 
 
-This document explains how to run MXNet training on [Amazon EKS](https://aws.amazon.com/eks/).
-
 This documents assumes that you have an EKS cluster available and running. Make sure to have a [GPU-enabled Amazon EKS cluster](eks-gpu.md) ready.
 
 ## MNIST training using MXNet on EKS
@@ -52,4 +50,3 @@ In this sample, we'll use MNIST database of handwritten digits and train the mod
     INFO:root:Epoch[19] Train-accuracy=0.999155
     INFO:root:Epoch[19] Time cost=1.016
     INFO:root:Epoch[19] Validation-accuracy=0.981688
-   ```
