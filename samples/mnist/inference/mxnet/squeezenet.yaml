@@ -1,0 +1,55 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: squeezenet-service
+  labels:
+    app: squeezenet-service
+spec:
+  ports:
+  - port: 8080
+    targetPort: mms
+  selector:
+    app: squeezenet-service
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: squeezenet-service
+  labels:
+    app: squeezenet-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: squeezenet-service
+  template:
+    metadata:
+      labels:
+        app: squeezenet-service
+    spec:
+      containers:
+      - name: squeezenet-service
+        image: 763104351884.dkr.ecr.us-east-1.amazonaws.com/mxnet-inference:1.4.0-gpu-py36-cu90-ubuntu16.04
+        args:
+        - mxnet-model-server
+          --start
+          --mms-config /home/model-server/config.properties
+          --models squeezenet=https://s3.amazonaws.com/model-server/models/squeezenet_v1.1/squeezenet_v1.1.model
+        ports:
+        - name: mms
+          containerPort: 8080
+        - name: mms-management
+          containerPort: 8081
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: AWS_REGION
+          value: us-east-1
+        - name: S3_USE_HTTPS
+          value: "true"
+        - name: S3_VERIFY_SSL
+          value: "true"
+        - name: S3_ENDPOINT
+          value: s3.us-east-1.amazonaws.com
+
+
